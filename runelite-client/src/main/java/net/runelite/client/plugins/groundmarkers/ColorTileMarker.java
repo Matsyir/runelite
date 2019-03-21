@@ -36,5 +36,6 @@ import net.runelite.api.coords.WorldPoint;
 class ColorTileMarker
 {
 	private WorldPoint worldPoint;
-	private Color color;
+	private Color outlineColor;
+	private Color fillColor;
 }

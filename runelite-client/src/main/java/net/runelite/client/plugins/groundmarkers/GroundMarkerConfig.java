@@ -36,13 +36,24 @@ public interface GroundMarkerConfig extends Config
 {
 	@Alpha
 	@ConfigItem(
-		keyName = "markerColor",
-		name = "Color of the tile",
+		keyName = "markerOutlineColor",
+		name = "Color of the tile's outline",
 		description = "Configures the color of marked tile"
 	)
-	default Color markerColor()
+	default Color markerOutlineColor()
 	{
 		return Color.YELLOW;
+	}
+
+	@Alpha
+	@ConfigItem(
+			keyName = "markerFillColor",
+			name = "Color of the tile's fill",
+			description = "Configures the color of marked tile"
+	)
+	default Color markerFillColor()
+	{
+		return new Color(0, 0, 0, 50);
 	}
 
 	@ConfigItem(

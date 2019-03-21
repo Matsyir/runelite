@@ -72,20 +72,27 @@ public class GroundMarkerOverlay extends Overlay
 				continue;
 			}
 
-			Color tileColor = point.getColor();
-			if (tileColor == null || !config.rememberTileColors())
+			Color tileOutlineColor = point.getOutlineColor();
+			if (tileOutlineColor == null || !config.rememberTileColors())
 			{
-				// If this is an old tile which has no color, or rememberTileColors is off, use marker color
-				tileColor = config.markerColor();
+				// If this is an old tile which has no outline color, or rememberTileColors is off, use marker color
+				tileOutlineColor = config.markerOutlineColor();
 			}
 
-			drawTile(graphics, worldPoint, tileColor);
+			Color tileFillColor = point.getFillColor();
+			if (tileFillColor == null || !config.rememberTileColors())
+			{
+				// If this is an old tile which has no fill color, or rememberTileColors is off, use marker color
+				tileFillColor = config.markerOutlineColor();
+			}
+
+			drawTile(graphics, worldPoint, tileOutlineColor, tileFillColor);
 		}
 
 		return null;
 	}
 
-	private void drawTile(Graphics2D graphics, WorldPoint point, Color color)
+	private void drawTile(Graphics2D graphics, WorldPoint point, Color outlineColor, Color fillColor)
 	{
 		WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
 
@@ -106,6 +113,6 @@ public class GroundMarkerOverlay extends Overlay
 			return;
 		}
 
-		OverlayUtil.renderPolygon(graphics, poly, color);
+		OverlayUtil.renderPolygon(graphics, poly, outlineColor, true, fillColor);
 	}
 }
