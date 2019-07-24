@@ -170,11 +170,12 @@ public class GroundMarkerPlugin extends Plugin
 		return points.stream()
 			.map(point -> new ColorTileMarker(
 				WorldPoint.fromRegion(point.getRegionId(), point.getRegionX(), point.getRegionY(), point.getZ()),
-				point.getOutlineColor()))
+				point.getOutlineColor(),
+				point.getFillColor()))
 			.flatMap(colorTile ->
 			{
 				final Collection<WorldPoint> localWorldPoints = WorldPoint.toLocalInstance(client, colorTile.getWorldPoint());
-				return localWorldPoints.stream().map(wp -> new ColorTileMarker(wp, colorTile.getOutlineColor()));
+				return localWorldPoints.stream().map(wp -> new ColorTileMarker(wp, colorTile.getOutlineColor(), colorTile.getFillColor()));
 			})
 			.collect(Collectors.toList());
 	}
@@ -260,7 +261,7 @@ public class GroundMarkerPlugin extends Plugin
 		WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, localPoint);
 
 		int regionId = worldPoint.getRegionID();
-		GroundMarkerPoint point = new GroundMarkerPoint(regionId, worldPoint.getRegionX(), worldPoint.getRegionY(), client.getPlane(), config.markerOutlineColor());
+		GroundMarkerPoint point = new GroundMarkerPoint(regionId, worldPoint.getRegionX(), worldPoint.getRegionY(), client.getPlane(), config.markerOutlineColor(), config.markerFillColor());
 		log.debug("Updating point: {} - {}", point, worldPoint);
 
 		List<GroundMarkerPoint> groundMarkerPoints = new ArrayList<>(getPoints(regionId));

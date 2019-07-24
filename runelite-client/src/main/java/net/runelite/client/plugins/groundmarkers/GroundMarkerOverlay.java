@@ -75,15 +75,15 @@ public class GroundMarkerOverlay extends Overlay
 			Color tileOutlineColor = point.getOutlineColor();
 			if (tileOutlineColor == null || !config.rememberTileColors())
 			{
-				// If this is an old tile which has no outline color, or rememberTileColors is off, use marker color
+				// If this is an old tile which has no outline color, or rememberTileColors is off, use outline color
 				tileOutlineColor = config.markerOutlineColor();
 			}
 
 			Color tileFillColor = point.getFillColor();
 			if (tileFillColor == null || !config.rememberTileColors())
 			{
-				// If this is an old tile which has no fill color, or rememberTileColors is off, use marker color
-				tileFillColor = config.markerOutlineColor();
+				// If this is an old tile which has no fill color, or rememberTileColors is off, use fill color
+				tileFillColor = config.markerFillColor();
 			}
 
 			drawTile(graphics, worldPoint, tileOutlineColor, tileFillColor);
