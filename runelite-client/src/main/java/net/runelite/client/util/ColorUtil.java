@@ -113,6 +113,97 @@ public class ColorUtil
 	}
 
 	/**
+	 * Linearly multiplies color's red, green, blue components by a given factor.
+	 * Similar to java.awt.Color::brighter(), but allows specifying a custom factor.
+	 * A factor == 1 will make the color completely white, and a factor == 0 will do nothing.
+	 * A factor == 0.3 will provide the same behavior as the native brighter() function.
+	 * Note: This provides a different result than ColorUtil.colorLerp(color, Color.WHITE)
+	 *
+	 * @param color color to brighten
+	 * @param t factor amount to brighten [0-1]
+	 * @return  interpolated color
+	 */
+	public static Color brighten(final Color color, double t)
+	{
+		t = 1 - t;
+		t = Math.max(Math.min(t, 1), 0); // ensure t is clamped between a range of 0-1
+
+		int r = color.getRed();
+		int g = color.getGreen();
+		int b = color.getBlue();
+		int alpha = color.getAlpha();
+
+		if (r <= 0 && g <= 0 && b <= 0)
+		{
+			return new Color(0, 0, 0, alpha);
+		}
+
+		/* From 2D group:
+		 * 1. black.brighter() should return grey
+		 * 2. applying brighter to blue will always return blue, brighter
+		 * 3. non pure color (non zero rgb) will eventually return white
+		 */
+		int i = (int)(1.0 / (1.0 - t));
+		if ( r < i ) r = i;
+		if ( g < i ) g = i;
+		if ( b < i ) b = i;
+
+		return new Color(Math.min((int)(r / t), 255),
+			Math.min((int)(g / t), 255),
+			Math.min((int)(b / t), 255),
+			alpha);
+	}
+
+	/**
+	 * Linearly multiplies color's red, green, blue components by a given factor.
+	 * Similar to java.awt.Color::brighter(), but allows specifying a custom factor.
+	 * This override uses the same default factor of 0.3
+	 *
+	 * @param color color to brighten
+	 * @return  interpolated color
+	 */
+	public static Color brighten(final Color color)
+	{
+		return brighten(color, 0.3);
+	}
+
+
+	/**
+	 * Linearly multiplies color's red, green, blue components by a given factor.
+	 * Similar to java.awt.Color::darker(), but allows specifying a custom factor.
+	 * A factor == 1 will make the color completely black, and a factor == 0 will do nothing.
+	 * A factor == 0.3 will provide the same behavior as the native darker() function.
+	 * Note: This provides a different result than ColorUtil.colorLerp(color, Color.BLACK)
+	 *
+	 * @param color color to darken
+	 * @param t factor amount to brighten [0-1]
+	 * @return  interpolated color
+	 */
+	public static Color darken(final Color color, double t)
+	{
+		t = 1 - t;
+		t = Math.max(Math.min(t, 1), 0); // ensure t is clamped between a range of 0-1
+
+		return new Color(Math.max((int)(color.getRed()  * t), 0),
+			Math.max((int)(color.getGreen() * t), 0),
+			Math.max((int)(color.getBlue() * t), 0),
+			color.getAlpha());
+	}
+
+	/**
+	 * Linearly multiplies color's red, green, blue components by a given factor.
+	 * Similar to java.awt.Color::darker(), but allows specifying a custom factor.
+	 * This override uses the same default factor of 0.3
+	 *
+	 * @param color color to darken
+	 * @return  interpolated color
+	 */
+	public static Color darken(final Color color)
+	{
+		return darken(color, 0.3);
+	}
+
+	/**
 	 * Gets the RGB hex color code of the passed color.
 	 *
 	 * @param color The color to get a hex code from.

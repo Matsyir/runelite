@@ -119,4 +119,47 @@ public interface StatusBarsConfig extends Config
 	{
 		return BarRenderer.DEFAULT_WIDTH;
 	}
+
+
+
+	@ConfigItem(
+		keyName = "statusBarTickMetronome",
+		name = "Tick Metronome",
+		description = "Status bars will flick to a darker color every tick, serving as a tick metronome.",
+		position = 1000
+	)
+	default boolean statusBarTickMetronome()
+	{
+		return false;
+	}
+
+	@Range(
+		min = 0,
+		max = 120
+	)
+	@ConfigItem(
+		keyName = "healthWarningThreshold",
+		name = "Health Warning Threshold",
+		description = "The HP threshold where the status bar will begin flashing. 0 disables the warning.",
+		position = 1010
+	)
+	default int healthWarningThreshold()
+	{
+		return 0;
+	}
+
+	@Range(
+		min = 0,
+		max = 120
+	)
+	@ConfigItem(
+		keyName = "prayWarningThreshold",
+		name = "Prayer Warning Threshold",
+		description = "The Prayer threshold where the status bar will begin flashing. 0 disables the warning.",
+		position = 1020
+	)
+	default int prayWarningThreshold()
+	{
+		return 0;
+	}
 }

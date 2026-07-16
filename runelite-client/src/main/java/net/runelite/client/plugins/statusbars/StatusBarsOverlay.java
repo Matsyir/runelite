@@ -57,19 +57,6 @@ import net.runelite.client.util.ImageUtil;
 
 class StatusBarsOverlay extends Overlay
 {
-	private static final Color PRAYER_COLOR = new Color(50, 200, 200, 175);
-	private static final Color ACTIVE_PRAYER_COLOR = new Color(57, 255, 186, 225);
-	private static final Color HEALTH_COLOR = new Color(225, 35, 0, 125);
-	private static final Color POISONED_COLOR = new Color(0, 145, 0, 150);
-	private static final Color VENOMED_COLOR = new Color(0, 65, 0, 150);
-	private static final Color HEAL_COLOR = new Color(255, 112, 6, 150);
-	private static final Color PRAYER_HEAL_COLOR = new Color(57, 255, 186, 75);
-	private static final Color ENERGY_HEAL_COLOR = new Color (199,  118, 0, 218);
-	private static final Color RUN_STAMINA_COLOR = new Color(160, 124, 72, 255);
-	private static final Color SPECIAL_ATTACK_COLOR = new Color(3, 153, 0, 195);
-	private static final Color ENERGY_COLOR = new Color(199, 174, 0, 220);
-	private static final Color DISEASE_COLOR = new Color(255, 193, 75, 181);
-	private static final Color PARASITE_COLOR = new Color(196, 62, 109, 181);
 	private static final int HEIGHT = 252;
 	private static final int RESIZED_BOTTOM_HEIGHT = 272;
 	private static final int RESIZED_BOTTOM_OFFSET_Y = 12;
@@ -116,31 +103,32 @@ class StatusBarsOverlay extends Overlay
 			() -> getRestoreValue(Skill.HITPOINTS.getName()),
 			() ->
 			{
+				final boolean isMetronomeTick = config.statusBarTickMetronome() && client.getTickCount() % 2 == 0;
 				final int poisonState = client.getVarpValue(VarPlayerID.POISON);
 
 				if (poisonState >= 1000000)
 				{
-					return VENOMED_COLOR;
+					return StatusBarColors.getVenomed(isMetronomeTick);
 				}
 
 				if (poisonState > 0)
 				{
-					return POISONED_COLOR;
+					return StatusBarColors.getPoisoned(isMetronomeTick);
 				}
 
 				if (client.getVarpValue(VarPlayerID.DISEASE) > 0)
 				{
-					return DISEASE_COLOR;
+					return StatusBarColors.getDisease(isMetronomeTick);
 				}
 
 				if (client.getVarbitValue(VarbitID.PARASITE) >= 1)
 				{
-					return PARASITE_COLOR;
+					return StatusBarColors.getParasite(isMetronomeTick);
 				}
 
-				return HEALTH_COLOR;
+				return StatusBarColors.getHealth(isMetronomeTick);
 			},
-			() -> HEAL_COLOR,
+			() -> StatusBarColors.HEAL,
 			() ->
 			{
 				final int poisonState = client.getVarpValue(VarPlayerID.POISON);
@@ -169,20 +157,21 @@ class StatusBarsOverlay extends Overlay
 			() -> getRestoreValue(Skill.PRAYER.getName()),
 			() ->
 			{
-				Color prayerColor = PRAYER_COLOR;
+				final boolean isMetronomeTick = config.statusBarTickMetronome() && client.getTickCount() % 2 == 0;
+				Color prayerColor = StatusBarColors.getPrayer(isMetronomeTick);
 
 				for (Prayer pray : Prayer.values())
 				{
 					if (client.isPrayerActive(pray))
 					{
-						prayerColor = ACTIVE_PRAYER_COLOR;
+						prayerColor = StatusBarColors.getActivePrayer(isMetronomeTick);
 						break;
 					}
 				}
 
 				return prayerColor;
 			},
-			() -> PRAYER_HEAL_COLOR,
+			() -> StatusBarColors.PRAYER_HEAL,
 			() -> skillIconManager.getSkillImage(Skill.PRAYER, true)
 		));
 		barRenderers.put(StatusBarsConfig.BarMode.RUN_ENERGY, new BarRenderer(
@@ -193,21 +182,21 @@ class StatusBarsOverlay extends Overlay
 			{
 				if (client.getVarbitValue(VarbitID.STAMINA_ACTIVE) != 0)
 				{
-					return RUN_STAMINA_COLOR;
+					return StatusBarColors.RUN_STAMINA;
 				}
 				else
 				{
-					return ENERGY_COLOR;
+					return StatusBarColors.ENERGY;
 				}
 			},
-			() -> ENERGY_HEAL_COLOR,
+			() -> StatusBarColors.ENERGY_HEAL,
 			() -> loadSprite(SpriteID.OrbIcon.WALK)
 		));
 		barRenderers.put(StatusBarsConfig.BarMode.SPECIAL_ATTACK, new BarRenderer(
 			() -> MAX_SPECIAL_ATTACK_VALUE,
 			() -> client.getVarpValue(VarPlayerID.SA_ENERGY) / 10,
 			() -> 0,
-			() -> SPECIAL_ATTACK_COLOR,
+			() -> StatusBarColors.SPECIAL_ATTACK,
 			() -> null,
 			() -> loadSprite(SpriteID.OrbIcon.SPECIAL)
 		));
